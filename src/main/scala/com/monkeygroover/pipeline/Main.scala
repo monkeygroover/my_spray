@@ -1,9 +1,9 @@
 package com.monkeygroover.pipeline
 
-import shapeless.{HNil, ::, HList}
-import Directives._
-import FutureDirectives._
-import HListable._
+import com.monkeygroover.pipeline.Directives._
+import com.monkeygroover.pipeline.FutureDirectives._
+import com.monkeygroover.pipeline.HListable._
+import shapeless._
 
 import scala.concurrent.Future
 
@@ -11,15 +11,17 @@ object Main extends App {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
+  case class Started()
+
   val asyncOp = Future.successful("woo")
 
-  val route = //logEvent {
+  val route = logEvent {
     onSuccess(asyncOp) { result: String =>
-      println(result)
-      complete {
-        Response(result)
-      }
+        complete {
+          Response(result)
+        }
     }
+  }
 
   route(Request("add"))
 
